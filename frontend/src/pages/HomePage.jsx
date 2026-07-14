@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getProperties } from "../services/api";
 
-const DISTRICTS = ["Quận 1", "Quận 2", "Quận 3", "Quận 4", "Quận 5", "Quận 6", "Quận 7", "Quận 8", "Quận 9", "Quận 10", "Quận 11", "Quận 12", "Bình Thạnh", "Gò Vấp", "Phú Nhuận", "Tân Bình", "Tân Phú", "Bình Tân", "Thủ Đức", "Hóc Môn", "Củ Chi", "Bình Chánh", "Nhà Bè", "Cần Giờ"];
-
 function formatPrice(price) {
   if (!price) return "Liên hệ";
   if (price >= 1e9) return (price / 1e9).toFixed(1) + " tỷ";
@@ -39,7 +37,7 @@ function PropertyCard({ property }) {
           {property.area && <span>{property.area} m²</span>}
           {property.district && <span>{property.district}</span>}
         </div>
-        <p className="text-lg font-bold text-red-600 mt-2">{formatPrice(property.price)}</p>
+        <p className="text-sm text-gray-500 mt-2">Liên hệ: <span className="font-semibold text-gray-700">0797 569 011</span></p>
       </div>
     </Link>
   );
@@ -49,7 +47,7 @@ export default function HomePage() {
   const [properties, setProperties] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({ district: "", listing_type: "", search: "", page: 1 });
+  const [filters, setFilters] = useState({ district: "", search: "", page: 1 });
 
   const fetchData = async () => {
     setLoading(true);
@@ -66,12 +64,9 @@ export default function HomePage() {
 
   useEffect(() => { fetchData(); }, [filters.page]);
 
-  const handleFilter = (key, value) => {
-    setFilters((f) => ({ ...f, [key]: value, page: 1 }));
-  };
-
   const handleSearch = (e) => {
     e.preventDefault();
+    setFilters((f) => ({ ...f, page: 1 }));
     fetchData();
   };
 
@@ -81,24 +76,23 @@ export default function HomePage() {
         <form onSubmit={handleSearch} className="flex flex-wrap gap-3 items-end">
           <div className="flex-1 min-w-[200px]">
             <label className="block text-xs text-gray-500 mb-1">Tìm kiếm</label>
-            <input type="text" placeholder="Tiêu đề, địa chỉ..." value={filters.search} onChange={(e) => handleFilter("search", e.target.value)}
+            <input type="text" placeholder="Tiêu đề, địa chỉ..." value={filters.search} onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
               className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
           </div>
           <div className="min-w-[160px]">
             <label className="block text-xs text-gray-500 mb-1">Quận/Huyện</label>
-            <select value={filters.district} onChange={(e) => handleFilter("district", e.target.value)}
+            <select value={filters.district} onChange={(e) => setFilters((f) => ({ ...f, district: e.target.value }))}
               className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
               <option value="">Tất cả</option>
-              {DISTRICTS.map((d) => <option key={d} value={d}>{d}</option>)}
-            </select>
-          </div>
-          <div className="min-w-[140px]">
-            <label className="block text-xs text-gray-500 mb-1">Loại</label>
-            <select value={filters.listing_type} onChange={(e) => handleFilter("listing_type", e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-              <option value="">Tất cả</option>
-              <option value="sale">Bán</option>
-              <option value="rent">Cho thuê</option>
+              <option value="Quận 1">Quận 1</option>
+              <option value="Quận 2">Quận 2</option>
+              <option value="Quận 3">Quận 3</option>
+              <option value="Quận 7">Quận 7</option>
+              <option value="Bình Thạnh">Bình Thạnh</option>
+              <option value="Gò Vấp">Gò Vấp</option>
+              <option value="Phú Nhuận">Phú Nhuận</option>
+              <option value="Tân Bình">Tân Bình</option>
+              <option value="Thủ Đức">Thủ Đức</option>
             </select>
           </div>
           <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700">
