@@ -1,13 +1,26 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { getProperty, deleteProperty, updateStatus } from "../services/api";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import L from "leaflet";
+import { useRef, useEffect } from "react";
 
 function formatPrice(price) {
   if (!price) return "Liên hệ";
   if (price >= 1e9) return (price / 1e9).toFixed(1) + " tỷ";
   if (price >= 1e6) return (price / 1e6).toFixed(0) + " triệu";
   return price.toLocaleString("vi-VN") + " đ";
+}
+
+function MapComponent({ lat, lng }) {
+  const mapRef = useRef(null);
+  useEffect(() => {
+    if (!mapRef.current || !lat || !lng) return;
+    const map = L.map(mapRef.current).setView([lat, lng], 15);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "© OpenStreetMap" }).addTo(map);
+    L.marker([lat, lng]).addTo(map);
+    return () => map.remove();
+  }, [lat, lng]);
+  return <div ref={mapRef} className="h-64 rounded-lg" />;
 }
 
 export default function PropertyDetail() {
@@ -137,10 +150,7 @@ export default function PropertyDetail() {
           {property.latitude && property.longitude && (
             <div className="mt-6">
               <h3 className="font-semibold text-gray-700 mb-2">Bản đồ</h3>
-              <MapContainer center={[property.latitude, property.longitude]} zoom={15} className="h-64 rounded-lg" scrollWheelZoom={false}>
-                <TileLayer attribution='&copy; OpenStreetMap' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <Marker position={[property.latitude, property.longitude]} />
-              </MapContainer>
+              <MapComponent lat={property.latitude} lng={property.longitude} />
             </div>
           )}
         </div>
