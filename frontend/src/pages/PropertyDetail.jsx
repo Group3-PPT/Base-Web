@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { getProperty, deleteProperty, updateStatus } from "../services/api";
 import L from "leaflet";
-import { useRef, useEffect } from "react";
 
 function formatPrice(price) {
   if (!price) return "Liên hệ";
