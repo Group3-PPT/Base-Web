@@ -20,7 +20,7 @@ export default function AdminPage() {
     setLoading(true);
     try {
       const { data } = await getProperties({ ...filters, limit: 20 });
-      setProperties(data?.properties || []);
+      setProperties(data?.data || data?.properties || []);
       setPagination(data?.pagination || { page: 1, totalPages: 1, total: 0 });
     } catch (err) {
       console.error(err);

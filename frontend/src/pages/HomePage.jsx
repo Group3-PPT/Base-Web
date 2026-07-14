@@ -55,7 +55,7 @@ export default function HomePage() {
     setLoading(true);
     try {
       const { data } = await getProperties(filters);
-      setProperties(data?.properties || []);
+      setProperties(data?.data || data?.properties || []);
       setPagination(data?.pagination || { page: 1, totalPages: 1, total: 0 });
     } catch (err) {
       console.error(err);
