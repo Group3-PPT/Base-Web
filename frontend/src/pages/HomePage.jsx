@@ -17,6 +17,11 @@ function PropertyCard({ property }) {
           <span className={`px-2.5 py-1 rounded-md text-xs font-bold ${property.listing_type === "rent" ? "bg-emerald-500 text-white" : "bg-blue-600 text-white"}`}>
             {property.listing_type === "rent" ? "Thuê" : "Bán"}
           </span>
+          {property.business_type && (
+            <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-gray-800 text-white">
+              {property.business_type}
+            </span>
+          )}
         </div>
         <div className="absolute top-2.5 right-2.5">
           <span className={`px-2.5 py-1 rounded-md text-xs font-bold ${property.status === "available" ? "bg-amber-400 text-amber-900" : property.status === "rented" ? "bg-violet-500 text-white" : "bg-red-500 text-white"}`}>
@@ -36,10 +41,15 @@ function PropertyCard({ property }) {
           <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
           <p className="text-xs line-clamp-1">{property.address}</p>
         </div>
-        <div className="flex items-center gap-2 mt-2">
-          {property.area && <span className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded">{property.area} m²</span>}
-          {property.district && <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{property.district}</span>}
+        <div className="flex items-center gap-2 mt-2 flex-wrap">
+          {property.area && <span className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-medium">{property.area} m²</span>}
+          {property.structure && <span className="text-xs bg-violet-50 text-violet-600 px-2 py-0.5 rounded font-medium">{property.structure}</span>}
         </div>
+        {property.price_display && (
+          <div className="mt-2">
+            <span className="text-sm font-bold text-red-600">{property.price_display}</span>
+          </div>
+        )}
         <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between">
           <span className="text-xs text-gray-400">Liên hệ: <span className="text-gray-600 font-medium">0797 569 011</span></span>
         </div>
